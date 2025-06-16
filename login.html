@@ -37,3 +37,41 @@
     </script>
 </body>
 </html>
+
+<script>
+    let currentPage = 0;
+    let sortBy = 'dateDesc';
+
+    function loadAds() {
+        document.getElementById('usernameDisplay').innerText = 'Logged in as: ' + localStorage.getItem('username');
+
+        fetch(`/market?page=${currentPage}&sortBy=${sortBy}`)
+            .then(response => response.json())
+            .then(data => {
+                const adsDiv = document.getElementById('ads');
+                adsDiv.innerHTML = '';
+                data.content.forEach(ad => {
+                    adsDiv.innerHTML += `<div><h2>${ad.name}</h2><img src="${ad.photoUrl}" width="200"><p>Price: ${ad.price}</p><a href='item.html?id=${ad.id}'>View Item</a></div><hr>`;
+                });
+            });
+    }
+
+    function nextPage() {
+        currentPage++;
+        loadAds();
+    }
+
+    function previousPage() {
+        if (currentPage > 0) {
+            currentPage--;
+            loadAds();
+        }
+    }
+
+    function changeSort(value) {
+        sortBy = value;
+        loadAds();
+    }
+
+    loadAds();
+</script>
