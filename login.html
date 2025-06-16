@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form id="loginForm">
+        Username or Email: <input type="text" name="usernameOrEmail" required><br>
+        Password: <input type="password" name="password" required><br>
+        <button type="submit">Login</button>
+    </form>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const loginData = {
+                usernameOrEmail: formData.get('usernameOrEmail'),
+                password: formData.get('password')
+            };
+
+            fetch('/user/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(loginData)
+            })
+            .then(response => response.json())
+            .then(user => {
+                localStorage.setItem('userId', user.id);
+                localStorage.setItem('username', user.username);
+                alert('Login successful');
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>
